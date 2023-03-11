@@ -44,13 +44,16 @@ const generateOffers = () => {
   };
   return o;
 };
+const generateData = () => {
+  const newData = `2019-${getRandomInt(31)}-${getRandomInt(12)}T${getRandomInt(24)}:${getRandomInt(60)}:${getRandomInt(60)}`;
+  return newData;
+};
 
 export const generatePoint = () => (
-
   {
     'base_price': getRandomInt(10000),
-    'date_from': '2019-07-10T22:55:56.845Z',
-    'date_to': '2019-07-11T11:22:13.375Z',
+    'date_from': generateData(),
+    'date_to': generateData(),
     'destination': generateDestination(getRandomInt(100)),
     'id': getRandomInt(100),
     'is_favorite': false,
