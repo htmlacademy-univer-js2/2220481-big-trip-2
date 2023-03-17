@@ -51,7 +51,7 @@ const generateData = () => {
 };
 
 const isFavorite = () =>{
-  if (getRandomInt(2) == 1){
+  if (getRandomInt(2) === 1){
     return true;
   }
   return false;

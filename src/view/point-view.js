@@ -11,7 +11,7 @@ const createNewPointTemplate = (task) => {
     ? doNormalTime(task['date_from'])
     : 'Дата неизвестна';
 
-  const isActive = task['is_favorite'] == true
+  const isActive = task['is_favorite'] === true
     ? 'active'
     : 'noactive';
   return `<div class="event">
