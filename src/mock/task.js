@@ -37,9 +37,10 @@ const generateDestination = (id) => {
 };
 
 const generateOffers = () => {
+  const offers = [ 'Upgrade to a business class', 'New transport', 'Dinner', 'Guide'];
   const o = {
     'id': getRandomInt(10),
-    'title': 'Upgrade to a business class',
+    'title': offers[getRandomInt(offers.length)],
     'price': getRandomInt(10000),
   };
   return o;
@@ -49,6 +50,13 @@ const generateData = () => {
   return newData;
 };
 
+const isFavorite = () =>{
+  if (getRandomInt(2) == 1){
+    return true;
+  }
+  return false;
+};
+
 export const generatePoint = () => (
   {
     'base_price': getRandomInt(10000),
@@ -56,7 +64,7 @@ export const generatePoint = () => (
     'date_to': generateData(),
     'destination': generateDestination(getRandomInt(100)),
     'id': getRandomInt(100),
-    'is_favorite': false,
+    'is_favorite': isFavorite(),
     'offers': generateOffers(),
     'type': generateType(),
   }

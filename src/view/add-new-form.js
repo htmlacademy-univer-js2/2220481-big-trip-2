@@ -1,7 +1,7 @@
 import { createElement } from '../render.js';
 
 const createNewAddFormTemplate = () => (
-  '<button class="trip-main__event-add-btn  btn  btn--big  btn--yellow" type="button" disabled>New event</button>'
+  '<button class="trip-main__event-add-btn  btn  btn--big  btn--yellow" type="button" >New event</button>'
 );
 
 export default class ListAddFormView {
