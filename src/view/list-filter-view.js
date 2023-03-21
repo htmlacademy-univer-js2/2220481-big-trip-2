@@ -22,13 +22,13 @@ const createNewFilterTemplate = () => (
 );
 
 export default class ListFilterView {
-  getTemplate() {
+  get template() {
     return createNewFilterTemplate;
   }
 
-  getElement() {
+  get elements() {
     if(!this.element){
-      this.element = createElement(this.getTemplate());
+      this.element = createElement(this.template);
     }
     return this.element;
   }

@@ -30,13 +30,13 @@ const createNewSortTemplate = () => (
 );
 
 export default class ListSortView {
-  getTemplate() {
+  get template() {
     return createNewSortTemplate;
   }
 
-  getElement() {
+  get elements() {
     if(!this.element){
-      this.element = createElement(this.getTemplate());
+      this.element = createElement(this.template);
     }
     return this.element;
   }

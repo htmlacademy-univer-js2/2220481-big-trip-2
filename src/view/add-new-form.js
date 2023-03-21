@@ -5,13 +5,13 @@ const createNewAddFormTemplate = () => (
 );
 
 export default class ListAddFormView {
-  getTemplate() {
+  get template() {
     return createNewAddFormTemplate;
   }
 
-  getElement() {
+  get elements() {
     if(!this.element){
-      this.element = createElement(this.getTemplate());
+      this.element = createElement(this.template);
     }
     return this.element;
   }
