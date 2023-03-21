@@ -38,12 +38,17 @@ const generateDestination = (id) => {
 
 const generateOffers = () => {
   const offers = [ 'Upgrade to a business class', 'New transport', 'Dinner', 'Guide'];
-  const o = {
-    'id': getRandomInt(10),
-    'title': offers[getRandomInt(offers.length)],
-    'price': getRandomInt(10000),
-  };
-  return o;
+
+  const arrOf = [];
+  for(let i = 0; i<= 3; i++){
+    const o = {
+      'id': getRandomInt(10),
+      'title': offers[getRandomInt(offers.length)],
+      'price': getRandomInt(10000),
+    };
+    arrOf.push(o);
+  }
+  return arrOf;
 };
 const generateData = () => {
   const newData = `2019-${getRandomInt(31)}-${getRandomInt(12)}T${getRandomInt(24)}:${getRandomInt(60)}:${getRandomInt(60)}`;

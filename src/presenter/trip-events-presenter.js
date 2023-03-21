@@ -6,22 +6,70 @@ import ListEventsView from '../view/trip-events-view.js';
 import { render } from '../render.js';
 
 export default class TripEventsPresenter{
+  #eventsList = null;  
+  #tripContainer = null;  
+  #pointsModel = null;  
+  #tripPoints = null;  
+   
   constructor() {
-    this.eventsList = new ListEventsView();
+    this.#eventsList = new ListEventsView();
+    this.#tripContainer = null;  
+    this.#pointsModel = null;  
+    this.#tripPoints = null;  
   }
 
   init (tripContainer, pointsModel){
-    this.tripContainer = tripContainer;
-    this.pointsModel = pointsModel;
-    this.tripPoints = [...this.pointsModel.getPoint()];
-    render(new ListSortView(), this.tripContainer);
-    render(this.eventsList, this.tripContainer);
-    render(new ListEditFormView(), this.eventsList.getElement());
+    
+    this.#tripContainer = tripContainer;
+    this.#pointsModel = pointsModel;
+    this.#tripPoints = [...this.#pointsModel.point];
+    
+    render(new ListSortView(), this.#tripContainer);
+    render(this.#eventsList, this.#tripContainer);
+    
+    
+    for(let i = 0; i<this.#tripPoints.length; i++){
+      
+      
+      this.#renderPoint(this.#tripPoints[i]);
 
-    for(let i = 0; i<this.tripPoints.length; i++){
-      render(new ListPointView(this.tripPoints[i]), this.eventsList.getElement());
+    }
+  
+  };
+  #renderPoint = (point) => {
+    const pointComponent = new ListPointView(point);
+    const editPointComponent = new ListEditFormView(point);
+    render(pointComponent,this.#eventsList.elements)
+
+    const replaceEventListChildren = (newChild, oldChild) => {
+      this.#eventsList.elements.replaceChild(newChild, oldChild);
+    }
+    const onEscKeyDown = (evt) => {
+      if(evt.key === 'Escape' || evt.key ==='Esc' ){
+        evt.preventDefault();
+        replaceEventListChildren(pointComponent.elements,editPointComponent.elements);
+        document.removeEventListener('keydown', onEscKeyDown);
+      }
+    };
+    const onFormOpenButClick = () => {
+      replaceEventListChildren(editPointComponent.elements, pointComponent.elements );
+      document.addEventListener('keydown', onEscKeyDown);
     }
 
-    render(new ListAddFormView(), this.eventsList.getElement());
+    const onFormCloseButClick = () => {
+      replaceEventListChildren(pointComponent.elements,editPointComponent.elements);
+      document.removeEventListener('keydown', onEscKeyDown);
+    }
+
+    const onEditFormSubmit = () => {
+      evt.preventDefault();
+      onFormCloseButClick();
+    }
+
+    pointComponent.elements.querySelector('.event__rollup-btn').addEventListener('click', onFormOpenButClick);
+    editPointComponent.elements.addEventListener('submit', onEditFormSubmit);
+    editPointComponent.elements.querySelector('.event__rollup-btn').addEventListener('click',onFormCloseButClick);
+
+
   }
 }
