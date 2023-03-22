@@ -36,11 +36,11 @@ const generateDestination = (id) => {
   return d;
 };
 
-const generateOffers = () => {
+const generateOffers = (value) => {
   const offers = [ 'Upgrade to a business class', 'New transport', 'Dinner', 'Guide'];
 
   const arrOf = [];
-  for(let i = 0; i<= 3; i++){
+  for(let i = 0; i< value; i++){
     const o = {
       'id': getRandomInt(10),
       'title': offers[getRandomInt(offers.length)],
@@ -70,7 +70,7 @@ export const generatePoint = () => (
     'destination': generateDestination(getRandomInt(100)),
     'id': getRandomInt(100),
     'is_favorite': isFavorite(),
-    'offers': generateOffers(),
+    'offers': generateOffers(3),
     'type': generateType(),
   }
 
