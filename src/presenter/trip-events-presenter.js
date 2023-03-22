@@ -3,6 +3,7 @@ import ListEditFormView from '../view/edit-form.js';
 import ListSortView from '../view/list-sort-view.js';
 import ListPointView from '../view/point-view.js';
 import ListEventsView from '../view/trip-events-view.js';
+import ListMessageEmpty from '../view/list-point-empty.js';
 import { render } from '../render.js';
 
 export default class TripEventsPresenter{
@@ -27,12 +28,17 @@ export default class TripEventsPresenter{
     render(new ListSortView(), this.#tripContainer);
     render(this.#eventsList, this.#tripContainer);
     
-    
-    for(let i = 0; i<this.#tripPoints.length; i++){
-      
-      
-      this.#renderPoint(this.#tripPoints[i]);
 
+    if(this.#tripPoints.length > 0){
+      for(let i = 0; i<this.#tripPoints.length; i++){
+      
+      
+        this.#renderPoint(this.#tripPoints[i]);
+  
+      }
+    }
+    else{
+      render(new ListMessageEmpty, this.#tripContainer);
     }
   
   };
