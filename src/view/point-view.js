@@ -1,5 +1,6 @@
 import { createElement } from '../render.js';
 import { doNormalDate, doNormalTime } from '../utils.js';
+import AbstractView from '../framework/view/abstract-view.js';
 const createNewPointTemplate = (task) => {
   const date = task['date_from'] !== null
     ? doNormalDate(task['date_from'])
@@ -50,25 +51,34 @@ const createNewPointTemplate = (task) => {
   </button>
 </div>`;
 };
+export default class ListPointView extends AbstractView{
+  #task = null
 
-export default class ListPointView {
   constructor(task){
-    this.task = task;
+    super()
+    this.#task = task
+  } 
+
+  get template(){
+    return createNewPointTemplate(this.#task);
+    
   }
 
-  get template() {
-    return createNewPointTemplate(this.task);
+  setClickHandler = (callback) => {
+    this._callback.click = callback;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#clickHandler)
+
   }
 
-  get elements() {
-    if(!this.element){
-      this.element = createElement(this.template);
-    }
-    return this.element;
-  }
+  #clickHandler = (evt) => {
+    evt.preventDefault();
 
-  removeElement() {
-    this.element = null;
+    this._callback.click()
   }
 }
+
+
+
+
+
 
