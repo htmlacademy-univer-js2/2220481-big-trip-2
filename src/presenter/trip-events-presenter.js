@@ -45,25 +45,25 @@ export default class TripEventsPresenter{
   #renderPoint = (point) => {
     const pointComponent = new ListPointView(point);
     const editPointComponent = new ListEditFormView(point);
-    render(pointComponent,this.#eventsList.elements)
+    render(pointComponent,this.#eventsList.element)
 
     const replaceEventListChildren = (newChild, oldChild) => {
-      this.#eventsList.elements.replaceChild(newChild, oldChild);
+      this.#eventsList.element.replaceChild(newChild, oldChild);
     }
     const onEscKeyDown = (evt) => {
       if(evt.key === 'Escape' || evt.key ==='Esc' ){
         evt.preventDefault();
-        replaceEventListChildren(pointComponent.elements,editPointComponent.elements);
+        replaceEventListChildren(pointComponent.element,editPointComponent.element);
         document.removeEventListener('keydown', onEscKeyDown);
       }
     };
     const onFormOpenButClick = () => {
-      replaceEventListChildren(editPointComponent.elements, pointComponent.elements );
+      replaceEventListChildren(editPointComponent.element, pointComponent.element );
       document.addEventListener('keydown', onEscKeyDown);
     }
 
     const onFormCloseButClick = () => {
-      replaceEventListChildren(pointComponent.elements,editPointComponent.elements);
+      replaceEventListChildren(pointComponent.element,editPointComponent.element);
       document.removeEventListener('keydown', onEscKeyDown);
     }
 
@@ -72,9 +72,11 @@ export default class TripEventsPresenter{
       onFormCloseButClick();
     }
 
-    pointComponent.elements.querySelector('.event__rollup-btn').addEventListener('click', onFormOpenButClick);
-    editPointComponent.elements.addEventListener('submit', onEditFormSubmit);
-    editPointComponent.elements.querySelector('.event__rollup-btn').addEventListener('click',onFormCloseButClick);
+    
+    editPointComponent.setSubmitHandler(onEditFormSubmit)
+    pointComponent.setClickHandler(onFormOpenButClick)
+    editPointComponent.setClickHandler(onFormCloseButClick)
+    
 
 
   }

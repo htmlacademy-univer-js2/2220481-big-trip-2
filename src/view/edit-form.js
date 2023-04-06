@@ -1,7 +1,7 @@
 import { createElement } from '../render.js';
 import { doNormalDateForOffer } from '../utils';
 import {MakeOffersList} from '../view/add-offers.js';
-
+import AbstractView from '../framework/view/abstract-view.js';
 const createNewEditFormTemplate = (task) => (
   `<form class="event event--edit" action="#" method="post">
   <header class="event__header">
@@ -114,24 +114,36 @@ const createNewEditFormTemplate = (task) => (
 </form>`
 );
 
-export default class ListEditFormView {
+export default class ListEditFormView extends AbstractView{
+  #task = null
   constructor(task){
-    this.task = task;
+    super()
+    this.#task = task;
   }
 
   get template() {
-    return createNewEditFormTemplate(this.task);
+    return createNewEditFormTemplate(this.#task);
   }
 
-  get elements() {
-    if(!this.element){
-      this.element = createElement(this.template);
-    }
-    return this.element;
+  setClickHandler = (callback) => {
+    this._callback.click = callback;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#clickHandler)
+  }
+  setSubmitHandler = (callback) => {
+    this._callback.click = callback;
+    this.element.addEventListener('submit', this.#submitHandler)
   }
 
-  removeElement() {
-    this.element = null;
+  #clickHandler = (evt) => {
+    evt.preventDefault();
+
+    this._callback.click()
+  }
+
+  #submitHandler = (evt) =>{
+    evt.preventDefault()
+
+    this._callback.click();
   }
 }
 

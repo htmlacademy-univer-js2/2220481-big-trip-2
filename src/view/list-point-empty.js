@@ -1,4 +1,5 @@
-import { createElement } from '../render.js';
+
+import AbstractView from '../framework/view/abstract-view.js';
 
 const createMessageListEmptyTemplate = () => (
   `<main class="page-body__page-main  page-main">
@@ -19,19 +20,9 @@ const createMessageListEmptyTemplate = () => (
 </main>`
 );
 
-export default class ListMessageEmpty {
-  get template() {
-    return createMessageListEmptyTemplate;
-  }
-
-  get elements() {
-    if(!this.element){
-      this.element = createElement(this.template);
-    }
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
+export default class ListMessageEmpty extends AbstractView{
+  get template(){
+    return createMessageListEmptyTemplate();
   }
 }
+
