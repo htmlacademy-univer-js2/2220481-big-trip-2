@@ -1,4 +1,3 @@
-import { createElement } from '../render.js';
 import { doNormalDateForOffer } from '../utils';
 import {MakeOffersList} from '../view/add-offers.js';
 import AbstractView from '../framework/view/abstract-view.js';
