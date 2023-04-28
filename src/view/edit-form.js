@@ -144,5 +144,14 @@ export default class ListEditFormView extends AbstractView{
 
     this._callback.click();
   }
+  setFormSubmitHandler = (callback) => {
+    this._callback.formSubmit = callback;
+    
+    this.element.addEventListener('click', this.#formSubmitHandler);
+  };
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.formSubmit(this.#task);
+  };
 }
 
