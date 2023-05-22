@@ -5,7 +5,7 @@ import OfferByTypeModel from './model/offer-model.js';
 import TripEventDestinationModel from './model/trip-event-destination-model.js';
 import FilterModel from './model/filter-model.js';
 
-const EVENTS_COUNT = 20;
+const EVENTS = 20;
 
 const tripMainContainer = document.querySelector('.trip-main');
 const filterContainer = tripMainContainer.querySelector('.trip-controls__filters');
@@ -14,8 +14,8 @@ const tripEventsComponent = document.querySelector('.trip-events');
 const newEventButton = tripMainContainer.querySelector('.trip-main__event-add-btn');
 
 const offerByTypeModel = new OfferByTypeModel();
-const destinationModel = new TripEventDestinationModel(EVENTS_COUNT);
-const tripEventModel = new TripEventsModel(EVENTS_COUNT, offerByTypeModel.offersByType, destinationModel.destinations);
+const destinationModel = new TripEventDestinationModel(EVENTS);
+const tripEventModel = new TripEventsModel(EVENTS, offerByTypeModel.offersByType, destinationModel.destinations);
 
 const filterModel = new FilterModel();
 
