@@ -5,7 +5,7 @@ import OfferByTypeModel from './model/offer-model.js';
 import TripEventDestinationModel from './model/trip-event-destination-model.js';
 import FilterModel from './model/filter-model.js';
 
-const EVENTS = 20;
+const EVENTS = 21;
 
 const tripMainContainer = document.querySelector('.trip-main');
 const filterContainer = tripMainContainer.querySelector('.trip-controls__filters');
