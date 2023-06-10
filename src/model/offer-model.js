@@ -3,13 +3,13 @@ import { generateOffersByType, generateOffer } from '../mock/offer.js';
 import { TYPES, shuffle, getRandomIntInclusively } from '../utils/common.js';
 
 const OFFERS_TITLES = [
-  'Add luggage',
   'Switch to comfort',
   'Add meal',
   'Choose seats',
   'Travel by train',
   'Call a taxi',
-  'Add drinks'
+  'Add drinks',
+  'Add luggage',
 ];
 
 export default class OfferByTypeModel extends Observable {
