@@ -60,11 +60,11 @@ export default class TripEventApiService extends ApiService {
       'date_to': tripEvent.dateTo,
       'is_favorite': tripEvent.isFavorite,
     };
-
+    delete adaptedTripEvent.isFavorite;
     delete adaptedTripEvent.startPrice;
     delete adaptedTripEvent.dateFrom;
     delete adaptedTripEvent.dateTo;
-    delete adaptedTripEvent.isFavorite;
+    
 
     return adaptedTripEvent;
   }
