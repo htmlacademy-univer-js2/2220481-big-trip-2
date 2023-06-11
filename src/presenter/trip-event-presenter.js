@@ -1,18 +1,18 @@
-import TripEventView from '../view/trip-event-view.js';
-import TripEventEditView from '../view/trip-event-edit-view.js';
+import EventTrip from '../view/event-view.js';
+import TripEventEditView from '../view/event-edit-view.js';
 import { render, replace, remove } from '../framework/render.js';
-import { isEscapePushed, PointMode, UpdateType, UserAction } from '../utils/common.js';
-import { areDatesSame } from '../utils/trip-event-date.js';
+import { isEscapeOn, POINT_MODEL, UPDATE_TYPE, USER_ACTION } from '../utils/common.js';
+import { sameDates } from '../utils/event-date.js';
 
 export default class TripEventPresenter {
   #tripEvent;
-  #pointMode;
+  #pointModel;
 
   #tripEventsListContainer;
   #tripEventComponent;
-  #editFormComponent;
+  #editForm;
 
-  #offersByType;
+  #offersType;
   #destinations;
   #detinationNames;
 
@@ -22,17 +22,17 @@ export default class TripEventPresenter {
   constructor(tripEventsListContainer, offersByType, destinations, destinationNames, changeData, changePointMode) {
     this.#tripEventsListContainer = tripEventsListContainer;
 
-    this.#offersByType = offersByType;
+    this.#offersType = offersByType;
     this.#destinations = destinations;
     this.#detinationNames = destinationNames;
 
     this.#changeData = changeData;
     this.#changePointMode = changePointMode;
 
-    this.#pointMode = PointMode.DEFAULT;
+    this.#pointModel = POINT_MODEL.DEFAULT;
 
     this.#tripEventComponent = null;
-    this.#editFormComponent = null;
+    this.#editForm = null;
   }
 
   init(tripEvent) {
@@ -42,137 +42,137 @@ export default class TripEventPresenter {
   }
 
   resetTripEventMode() {
-    if(this.#pointMode === PointMode.EDITING) {
-      this.#replaceFormToPoint();
+    if(this.#pointModel === POINT_MODEL.EDITING) {
+      this.#replaceForm();
     }
   }
 
   destroy() {
     remove(this.#tripEventComponent);
-    remove(this.#editFormComponent);
+    remove(this.#editForm);
   }
 
-  setSaving() {
-    if(this.#pointMode === PointMode.EDITING) {
-      this.#editFormComponent.updateElement({
-        isSaving: true,
-        isDisabled: true,
-      });
-    }
-  }
-
-  setDeleting() {
-    if(this.#pointMode === PointMode.EDITING) {
-      this.#editFormComponent.updateElement({
+  setDelete() {
+    if(this.#pointModel === POINT_MODEL.EDITING) {
+      this.#editForm.updateElement({
         isDeleting: true,
         isDisabled: true,
       });
     }
   }
 
-  setAborting() {
-    if(this.#pointMode === PointMode.EDITING) {
-      this.#editFormComponent.shake();
+  setSave() {
+    if(this.#pointModel === POINT_MODEL.EDITING) {
+      this.#editForm.updateElement({
+        isSaving: true,
+        isDisabled: true,
+      });
+    }
+  }
+
+  setAborte() {
+    if(this.#pointModel === POINT_MODEL.EDITING) {
+      this.#editForm.shake();
       return;
     }
 
-    const resetEditFormState = () => {
-      this.#editFormComponent.updateElement({
+    const resetEdit = () => {
+      this.#editForm.updateElement({
         isSaving: false,
         isDeleting: false,
         isDisabled: false,
       });
     };
 
-    this.#editFormComponent.shake(resetEditFormState);
+    this.#editForm.shake(resetEdit);
   }
 
   #renderTripEventComponent() {
     const previousEventComponent = this.#tripEventComponent;
-    const previousEditFormComponent = this.#editFormComponent;
+    const previousEditFormComponent = this.#editForm;
 
-    this.#tripEventComponent = new TripEventView(this.#tripEvent,
-      this.#offersByType.length ? this.#offersByType.find((offer) => offer.type === this.#tripEvent.type).offers : [],
+    this.#tripEventComponent = new EventTrip(this.#tripEvent,
+      this.#offersType.length ? this.#offersType.find((offer) => offer.type === this.#tripEvent.type).offers : [],
       this.#destinations.find((place) => place.id === this.#tripEvent.destination));
 
-    this.#renderEditFormComponent();
+    this.#renderEditForm();
 
-    this.#tripEventComponent.setFormOpenClickHandler(this.#onFormOpenButtonClick);
-    this.#tripEventComponent.setFavoriteButtonHandler(this.#onFavoriteChangeClick);
+    this.#tripEventComponent.setFormOpenClick(this.#onOpenButtonClick);
+    this.#tripEventComponent.setFavoriteButton(this.#onFavoriteChangeClick);
 
     if(previousEventComponent === null || previousEditFormComponent === null) {
       render(this.#tripEventComponent, this.#tripEventsListContainer);
       return;
     }
-
-    if(this.#pointMode === PointMode.DEFAULT) {
-      replace(this.#tripEventComponent, previousEventComponent);
+    if(this.#pointModel === POINT_MODEL.EDITING) {
+      replace(this.#tripEventComponent, previousEditFormComponent);
+      this.#pointModel = POINT_MODEL.DEFAULT;
     }
 
-    if(this.#pointMode === PointMode.EDITING) {
-      replace(this.#tripEventComponent, previousEditFormComponent);
-      this.#pointMode = PointMode.DEFAULT;
+
+    if(this.#pointModel === POINT_MODEL.DEFAULT) {
+      replace(this.#tripEventComponent, previousEventComponent);
     }
 
     remove(previousEventComponent);
     remove(previousEditFormComponent);
   }
 
-  #renderEditFormComponent() {
-    this.#editFormComponent = new TripEventEditView(this.#offersByType, this.#destinations, this.#detinationNames, this.#tripEvent);
+  #renderEditForm() {
+    this.#editForm = new TripEventEditView(this.#offersType, this.#destinations, this.#detinationNames, this.#tripEvent);
 
-    this.#editFormComponent.setFormSubmitHandler(this.#onFormSubmit);
-    this.#editFormComponent.setFormCloseClickHandler(this.#onFormCloseButtonClick);
-    this.#editFormComponent.setFormDeleteHandler(this.#onDeleteButtonClick);
+    this.#editForm.setFormSubmitHandler(this.#onFormSubmit);
+    this.#editForm.setFormCloseClickHandler(this.#onCloseButtonClick);
+    this.#editForm.setFormDeleteHandler(this.#onDeleteButtonClick);
   }
 
-  #replacePointToForm() {
-    replace(this.#editFormComponent, this.#tripEventComponent);
+  #replacePoint() {
+    replace(this.#editForm, this.#tripEventComponent);
 
     document.addEventListener('keydown', this.#onEscapeKeyDown);
 
     this.#changePointMode();
-    this.#pointMode = PointMode.EDITING;
+    this.#pointModel = POINT_MODEL.EDITING;
   }
 
-  #replaceFormToPoint() {
-    this.#editFormComponent.reset(this.#tripEvent);
-    replace(this.#tripEventComponent, this.#editFormComponent);
+  #replaceForm() {
+    this.#editForm.reset(this.#tripEvent);
+    replace(this.#tripEventComponent, this.#editForm);
 
     document.removeEventListener('keydown', this.#onEscapeKeyDown);
 
-    this.#pointMode = PointMode.DEFAULT;
+    this.#pointModel = POINT_MODEL.DEFAULT;
   }
 
-  #onFormOpenButtonClick = () => {
-    this.#replacePointToForm();
+  #onOpenButtonClick = () => {
+    this.#replacePoint();
   };
 
-  #onFormCloseButtonClick = () => {
-    this.#replaceFormToPoint();
+  #onCloseButtonClick = () => {
+    this.#replaceForm();
   };
 
   #onFormSubmit = (tripEvent) => {
-    const isMinorUpdate = !areDatesSame(this.#tripEvent.dateFrom, tripEvent.dateFrom)
-      || !areDatesSame(this.#tripEvent.dateTo, tripEvent.dateTo)
-      || this.#tripEvent.basePrice !== tripEvent.basePrice;
-    this.#changeData(UserAction.UPDATE_TRIP_EVENT, isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH, tripEvent);
+    const isMinorUpdate = !sameDates(this.#tripEvent.dateFrom, tripEvent.dateFrom)
+      || !sameDates(this.#tripEvent.dateTo, tripEvent.dateTo)
+      || this.#tripEvent.startPrice !== tripEvent.startPrice;
+    this.#changeData(USER_ACTION.UPDATE_TRIP_EVENT, isMinorUpdate ? UPDATE_TYPE.MINOR : UPDATE_TYPE.PATCH, tripEvent);
   };
 
   #onEscapeKeyDown = (evt) => {
-    if(isEscapePushed(evt)) {
+    if(isEscapeOn(evt)) {
       evt.preventDefault();
 
-      this.#editFormComponent.reset(this.#tripEvent);
-      this.#replaceFormToPoint();
+      this.#editForm.reset(this.#tripEvent);
+      this.#replaceForm();
     }
   };
 
   #onFavoriteChangeClick = () => {
-    this.#changeData(UserAction.UPDATE_TRIP_EVENT, UpdateType.PATCH, {...this.#tripEvent, isFavorite: !this.#tripEvent.isFavorite});
+    this.#changeData(USER_ACTION.UPDATE_TRIP_EVENT, UPDATE_TYPE.PATCH, {...this.#tripEvent, isFavorite: !this.#tripEvent.isFavorite});
   };
 
   #onDeleteButtonClick = (tripEvent) => {
-    this.#changeData(UserAction.DELETE_TRIP_EVENT, UpdateType.MINOR, tripEvent);
+    this.#changeData(USER_ACTION.DELETE_TRIP_EVENT, UPDATE_TYPE.MINOR, tripEvent);
   };
 }

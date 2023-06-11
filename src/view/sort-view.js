@@ -1,11 +1,12 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { SortType } from '../utils/sort.js';
+import { SORT_TYPES } from '../utils/sort.js';
 
-const createSortTemplate = (currentSortType) => (
+const createSort = (nowSortType) => (
   `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
-    ${Object.values(SortType).map((sortType) => {
-    const isDisabled = sortType === SortType.EVENT || sortType === SortType.OFFER ? 'disabled' : '';
-    const isChecked = sortType === currentSortType ? 'checked' : '';
+    ${Object.values(SORT_TYPES).map((sortType) => {
+    const isChecked = sortType === nowSortType ? 'checked' : '';
+    const isDisabled = sortType === SORT_TYPES.EVENT || sortType === SORT_TYPES.OFFER ? 'disabled' : '';
+    
 
     return (
       `<div class="trip-sort__item  trip-sort__item--${sortType}">
@@ -15,30 +16,30 @@ const createSortTemplate = (currentSortType) => (
   </form>`
 );
 
-export default class SortView extends AbstractView {
-  #currentSortType;
+export default class SortClass extends AbstractView {
+  #nowSortType;
 
-  constructor(currentSortType) {
+  constructor(nowSortType) {
     super();
-    this.#currentSortType = currentSortType;
+    this.#nowSortType = nowSortType;
   }
 
   get template() {
-    return createSortTemplate(this.#currentSortType);
+    return createSort(this.#nowSortType);
   }
 
-  setSortTypeChangeHandler(callback) {
-    this._callback.sortTypeChange = callback;
+  setSortTypeChangeHandler(cb) {
+    this._cb.sortTypeChange = cb;
 
-    this.element.addEventListener('click', this.#onSortTypeChange);
+    this.element.addEventListener('click', this.#sortChange);
   }
 
-  #onSortTypeChange = (evt) => {
+  #sortChange = (evt) => {
     if(evt.target.tagName !== 'INPUT') {
       return;
     }
 
     evt.preventDefault();
-    this._callback.sortTypeChange(evt.target.dataset.sortType);
+    this._cb.sortTypeChange(evt.target.dataset.sortType);
   };
 }

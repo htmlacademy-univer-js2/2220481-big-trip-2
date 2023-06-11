@@ -2,7 +2,7 @@ import Observable from '../framework/observable.js';
 
 export default class OfferByTypeModel extends Observable {
   #tripEventApiService;
-  #offersByType = [];
+  #offersType = [];
 
   constructor(tripEventApiService) {
     super();
@@ -11,13 +11,13 @@ export default class OfferByTypeModel extends Observable {
 
   async init() {
     try {
-      this.#offersByType = await this.#tripEventApiService.offersByType;
+      this.#offersType = await this.#tripEventApiService.offersByType;
     } catch(err) {
-      this.#offersByType = [];
+      this.#offersType = [];
     }
   }
 
   get offersByType() {
-    return this.#offersByType;
+    return this.#offersType;
   }
 }
