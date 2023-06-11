@@ -15,7 +15,7 @@ export default class AbstractView {
   #element = null;
 
   /** @type {Object} Объект с колбэками. Может использоваться для хранения обработчиков событий */
-  _callback = {};
+  _cb = {};
 
   constructor() {
     if (new.target === AbstractView) {
@@ -51,18 +51,18 @@ export default class AbstractView {
 
   /**
    * Метод, реализующий эффект "покачивания головой"
-   * @param {shakeCallback} [callback] Функция, которая будет вызвана после завершения анимации
+   * @param {shakeCallback} [cb] Функция, которая будет вызвана после завершения анимации
    */
-  shake(callback) {
+  shake(cb) {
     this.element.classList.add(SHAKE_CLASS_NAME);
     setTimeout(() => {
       this.element.classList.remove(SHAKE_CLASS_NAME);
-      callback?.();
+      cb?.();
     }, SHAKE_ANIMATION_TIMEOUT);
   }
 }
 
 /**
  * Функция, которая будет вызвана методом shake после завершения анимации
- * @callback shakeCallback
+ * @cb shakeCallback
  */

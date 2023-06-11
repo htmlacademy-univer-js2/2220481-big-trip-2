@@ -1,23 +1,23 @@
-const TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
-
-const PointMode = {
+const POINT_MODEL = {
   DEFAULT: 'default',
   EDITING: 'editing',
 };
 
-const UserAction = {
+const TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
+
+const USER_ACTION = {
   ADD_TRIP_EVENT: 'ADD_TRIP_EVENT',
   UPDATE_TRIP_EVENT: 'UPDATE_TRIP_EVENT',
   DELETE_TRIP_EVENT: 'DELETE_TRIP_EVENT',
 };
 
-const UpdateType = {
+const UPDATE_TYPE = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
   INIT: 'INIT',
 };
 
-const isEscapePushed = (evt) => evt.key === 'Escape';
+const isEscapeOn = (evt) => evt.key === 'Escape';
 
-export {TYPES, isEscapePushed, PointMode, UserAction, UpdateType};
+export {TYPES, isEscapeOn, POINT_MODEL, USER_ACTION, UPDATE_TYPE};

@@ -1,9 +1,9 @@
 import Observable from '../framework/observable.js';
-import { UpdateType } from '../utils/common.js';
+import { UPDATE_TYPE } from '../utils/common.js';
 
 export default class TripEventsModel extends Observable {
   #tripEventApiService;
-  #tripEvents = [];
+  #events = [];
 
   constructor(tripEventApiService) {
     super();
@@ -13,24 +13,24 @@ export default class TripEventsModel extends Observable {
   async init () {
     try {
       const tripEvents = await this.#tripEventApiService.tripEvents;
-      this.#tripEvents = tripEvents.map(this.#adaptToClient);
+      this.#events = tripEvents.map(this.#adToClient);
     } catch(err) {
-      this.#tripEvents = [];
+      this.#events = [];
     }
 
-    this._notify(UpdateType.INIT);
+    this._notify(UPDATE_TYPE.INIT);
   }
 
   get tripEvents() {
-    return this.#tripEvents;
+    return this.#events;
   }
 
   async addTripEvent(updateType, newItem) {
     try {
-      const response = await this.#tripEventApiService.createTripEvent(newItem);
-      const newTripEvent = this.#adaptToClient(response);
+      const response = await this.#tripEventApiService.createTrip(newItem);
+      const newTripEvent = this.#adToClient(response);
 
-      this.#tripEvents = [newTripEvent, ...this.#tripEvents];
+      this.#events = [newTripEvent, ...this.#events];
 
       this._notify(updateType, newItem);
     } catch(err) {
@@ -39,7 +39,7 @@ export default class TripEventsModel extends Observable {
   }
 
   async updateTripEvent(updateType, updatedItem) {
-    const updatedItemIndex = this.#tripEvents.findIndex((item) => item.id === updatedItem.id);
+    const updatedItemIndex = this.#events.findIndex((item) => item.id === updatedItem.id);
 
     if(updatedItemIndex === -1) {
       throw new Error('Can\'t update unexisting trip event');
@@ -47,9 +47,9 @@ export default class TripEventsModel extends Observable {
 
     try {
       const response = await this.#tripEventApiService.updateTripEvent(updatedItem);
-      const updatedTripEvent = this.#adaptToClient(response);
+      const updatedTripEvent = this.#adToClient(response);
 
-      this.#tripEvents = [...this.#tripEvents.slice(0, updatedItemIndex), updatedTripEvent, ...this.#tripEvents.slice(updatedItemIndex + 1)];
+      this.#events = [...this.#events.slice(0, updatedItemIndex), updatedTripEvent, ...this.#events.slice(updatedItemIndex + 1)];
 
       this._notify(updateType, updatedTripEvent);
     } catch(err) {
@@ -58,7 +58,7 @@ export default class TripEventsModel extends Observable {
   }
 
   async deleteTripEvent(updateType, deletingItem) {
-    const updatedItemIndex = this.#tripEvents.findIndex((item) => item.id === deletingItem.id);
+    const updatedItemIndex = this.#events.findIndex((item) => item.id === deletingItem.id);
 
     if(updatedItemIndex === -1) {
       throw new Error('Can\'t delete unexisting trip event');
@@ -66,7 +66,7 @@ export default class TripEventsModel extends Observable {
 
     try {
       await this.#tripEventApiService.deleteTripEvent(deletingItem);
-      this.#tripEvents = [...this.#tripEvents.slice(0, updatedItemIndex), ...this.#tripEvents.slice(updatedItemIndex + 1)];
+      this.#events = [...this.#events.slice(0, updatedItemIndex), ...this.#events.slice(updatedItemIndex + 1)];
 
       this._notify(updateType);
     } catch(err) {
@@ -74,9 +74,9 @@ export default class TripEventsModel extends Observable {
     }
   }
 
-  #adaptToClient(tripEvent) {
+  #adToClient(tripEvent) {
     const adaptedTripEvent = {...tripEvent,
-      basePrice: tripEvent['base_price'],
+      startPrice: tripEvent['base_price'],
       dateFrom: tripEvent['date_from'],
       dateTo: tripEvent['date_to'],
       isFavorite: tripEvent['is_favorite'],
@@ -84,9 +84,8 @@ export default class TripEventsModel extends Observable {
 
     delete adaptedTripEvent['base_price'];
     delete adaptedTripEvent['date_from'];
-    delete adaptedTripEvent['date_to'];
     delete adaptedTripEvent['is_favorite'];
-
+    delete adaptedTripEvent['date_to'];
     return adaptedTripEvent;
   }
 }

@@ -1,15 +1,15 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { FilterTypes } from '../utils/filter.js';
+import { TYPE_FILTER } from '../utils/filter.js';
 
-const MessagesByFilterType = {
-  [FilterTypes.EVERYTHING]: 'Click New Event to create your first point',
-  [FilterTypes.FUTURE]: 'There are no future events now',
-  [FilterTypes.PAST]: 'There are no past events now',
+const MESSAGES_FILTER = {
+  [TYPE_FILTER.EVERYTHING]: 'Click New Event to create your first point',
+  [TYPE_FILTER.FUTURE]: 'There are no future events now',
+  [TYPE_FILTER.PAST]: 'There are no past events now',
 };
 
-const createEmptyListTemplate = (filterType) => `<p class="trip-events__msg">${MessagesByFilterType[filterType]}</p>`;
+const createZeroFIlter = (filterType) => `<p class="trip-events__msg">${MESSAGES_FILTER[filterType]}</p>`;
 
-export default class EmptyTripEventsList extends AbstractView {
+export default class ZeroTripEventsClass extends AbstractView {
   #filterType;
 
   constructor(filterType) {
@@ -18,6 +18,6 @@ export default class EmptyTripEventsList extends AbstractView {
   }
 
   get template() {
-    return createEmptyListTemplate(this.#filterType);
+    return createZeroFIlter(this.#filterType);
   }
 }

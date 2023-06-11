@@ -1,6 +1,6 @@
-import { isPast, isFuture } from './trip-event-date.js';
+import { isPast, isFuture } from './event-date.js';
 
-const FilterTypes = {
+const TYPE_FILTER = {
   EVERYTHING: 'everything',
   FUTURE: 'future',
   PAST: 'past',
@@ -8,9 +8,9 @@ const FilterTypes = {
 
 
 const filter = {
-  [FilterTypes.EVERYTHING]: (tripEvents) => tripEvents,
-  [FilterTypes.FUTURE]: (tripEvents) => tripEvents.filter((point) => isFuture(point.dateFrom, 'D') || isFuture(point.dateTo, 'D')),
-  [FilterTypes.PAST]: (tripEvents) => tripEvents.filter((point) => isPast(point.dateTo, 'D') || isPast(point.dateFrom, 'D')),
+  [TYPE_FILTER.EVERYTHING]: (trip) => trip,
+  [TYPE_FILTER.FUTURE]: (trip) => trip.filter((nowPoint) => isFuture(nowPoint.dateFrom, 'D') || isFuture(nowPoint.dateTo, 'D')),
+  [TYPE_FILTER.PAST]: (trip) => trip.filter((nowPoint) => isPast(nowPoint.dateTo, 'D') || isPast(nowPoint.dateFrom, 'D')),
 };
 
-export {filter, FilterTypes};
+export {filter, TYPE_FILTER};

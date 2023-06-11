@@ -1,6 +1,6 @@
-import { sortByDate, sortByDuration } from './trip-event-date.js';
+import { sortDates, sortDuration } from './event-date.js';
 
-const SortType = {
+const SORT_TYPES = {
   DAY: 'day',
   EVENT: 'event',
   TIME: 'time',
@@ -8,10 +8,10 @@ const SortType = {
   OFFER: 'offer',
 };
 
-const sortTripEvents = {
-  [SortType.DAY]: (tripEvents) => tripEvents.sort(sortByDate),
-  [SortType.TIME]: (tripEvents) => tripEvents.sort(sortByDuration),
-  [SortType.PRICE]: (tripEvents) => tripEvents.sort((current, next) => next.basePrice - current.basePrice),
+const sortEvents = {
+  [SORT_TYPES.TIME]: (tripEvents) => tripEvents.sort(sortDuration),
+  [SORT_TYPES.DAY]: (tripEvents) => tripEvents.sort(sortDates),
+  [SORT_TYPES.PRICE]: (tripEvents) => tripEvents.sort((now, next) => next.startPrice - now.startPrice),
 };
 
-export {SortType, sortTripEvents};
+export {SORT_TYPES, sortEvents};

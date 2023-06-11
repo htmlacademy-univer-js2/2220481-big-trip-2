@@ -1,6 +1,6 @@
 import ApiService from './framework/api-service.js';
 
-const Method = {
+const METHOD = {
   GET: 'GET',
   PUT: 'PUT',
   POST: 'POST',
@@ -23,7 +23,7 @@ export default class TripEventApiService extends ApiService {
   async updateTripEvent(tripEvent) {
     const response = await this._load({
       url: `points/${tripEvent.id}`,
-      method: Method.PUT,
+      method: METHOD.PUT,
       body: JSON.stringify(this.#adaptToServer(tripEvent)),
       headers: new Headers({'Content-Type': 'application/json'})
     });
@@ -32,10 +32,10 @@ export default class TripEventApiService extends ApiService {
     return parsedResponce;
   }
 
-  async createTripEvent(tripEvent) {
+  async createTrip(tripEvent) {
     const response = await this._load({
       url: 'points',
-      method: Method.POST,
+      method: METHOD.POST,
       body: JSON.stringify(this.#adaptToServer(tripEvent)),
       headers: new Headers({'Content-Type': 'application/json'})
     });
@@ -47,7 +47,7 @@ export default class TripEventApiService extends ApiService {
   async deleteTripEvent(tripEvent) {
     const response = await this._load({
       url: `points/${tripEvent.id}`,
-      method: Method.DELETE,
+      method: METHOD.DELETE,
     });
 
     return response;
@@ -55,13 +55,13 @@ export default class TripEventApiService extends ApiService {
 
   #adaptToServer(tripEvent) {
     const adaptedTripEvent = {...tripEvent,
-      'base_price': tripEvent.basePrice,
+      'base_price': tripEvent.startPrice,
       'date_from': tripEvent.dateFrom,
       'date_to': tripEvent.dateTo,
       'is_favorite': tripEvent.isFavorite,
     };
 
-    delete adaptedTripEvent.basePrice;
+    delete adaptedTripEvent.startPrice;
     delete adaptedTripEvent.dateFrom;
     delete adaptedTripEvent.dateTo;
     delete adaptedTripEvent.isFavorite;

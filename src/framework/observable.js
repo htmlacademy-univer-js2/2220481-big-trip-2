@@ -33,7 +33,7 @@ export default class Observable {
 
 /**
  * Функция, которая будет вызвана при наступлении события
- * @callback observerCallback
+ * @cb observerCallback
  * @param {*} event Тип события
  * @param {*} [payload] Дополнительная информация
  */
