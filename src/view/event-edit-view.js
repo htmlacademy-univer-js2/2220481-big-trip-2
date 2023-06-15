@@ -130,7 +130,7 @@ const createTripEventEditTemplate = (tripEvent, offersByType, destinations, dest
             <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${startPrice}" ${disabledTag}>
           </div>
 
-          <button class="event__save-btn  btn  btn--blue" type="submit" ${disabledTag}>${isSaving ? 'Saving...' : 'Save'}</button>
+          <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled || startPrice === 0 ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
           <button class="event__reset-btn" type="reset" ${disabledTag}>${isNewEvent ? 'Cancel' : deleteMessage}</button>
           ${rollUpButton}
         </header>
@@ -245,7 +245,7 @@ export default class TripEventEditView extends AbstractStatefulView {
       this.element.querySelector('.event__available-offers').addEventListener('click', this.#onOfferClick);
     }
 
-    this.element.querySelector('#event-price-1').addEventListener('input', this.#onPriceInput);
+    this.element.querySelector('#event-price-1').addEventListener('change', this.#onPriceChange);
   }
 
   #setDateFromPicker() {
@@ -339,10 +339,10 @@ export default class TripEventEditView extends AbstractStatefulView {
     });
   };
 
-  #onPriceInput = (evt) => {
+  #onPriceChange = (evt) => {
     evt.preventDefault();
 
-    this._setState({
+    this.updateElement({
       startPrice: Math.abs(Number(evt.target.value.replace(/[^\d]/g, ''))),
     });
   };
